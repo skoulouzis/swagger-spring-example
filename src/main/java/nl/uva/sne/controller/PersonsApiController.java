@@ -44,6 +44,7 @@ public class PersonsApiController implements PersonsApi {
             @Min(0) @Max(100) @ApiParam(value = "Number of persons returned") @Valid @RequestParam(value = "pageSize", required = false) Integer pageSize,
             @ApiParam(value = "Page number") @Valid @RequestParam(value = "pageNumber", required = false) Integer pageNumber) {
         String accept = request.getHeader("Accept");
+        
         if (accept != null && accept.contains("application/json")) {
             List<Person> items = new ArrayList<>();
             for (int i = 0; i < 100; i++) {
