@@ -1,25 +1,28 @@
-jobs:
+sudo: required
+
+services:
+  - docker
+
+language: java
+
+matrix:
   include:
-    - stage: build-deploy
-      language: java
-      jdk: openjdk8
-      sudo: required
-      script: 
-        - mvn clean install dockerfile:build
-        - docker run -d -t -p 8080:8080 alogo53/swagger-spring:1.0.0
-      
-    - stage: test    
-      language: node_js
-      node_js:
-        - "8.2.1"
-      install:
+    - jdk: openjdk8
+    - jdk: openjdk9
+    - jdk: openjdk10
+    - install:
         - npm install newman
-        before_script:
-            - node --version
-            - npm --version
-            - node_modules/.bin/newman --version
-        
-      
-stages:
-  - build-deploy     
-  - test
+
+
+before_install:
+  - docker version
+  - docker info
+
+before_script:
+    - node --version
+    - npm --version
+    - node_modules/.bin/newman --version  
+    
+script:
+  - mvn clean install dockerfile:build
+  - docker run -d -t -p 8080:8080 alogo53/swagger-spring:1.0.0
