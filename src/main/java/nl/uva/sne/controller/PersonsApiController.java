@@ -45,7 +45,6 @@ public class PersonsApiController implements PersonsApi {
             @ApiParam(value = "Page number") @Valid @RequestParam(value = "pageNumber", required = false) Integer pageNumber) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
-
             List<Person> items = new ArrayList<>();
             for (int i = 0; i < 100; i++) {
                 Person person = new Person();
@@ -67,7 +66,6 @@ public class PersonsApiController implements PersonsApi {
             } else if (pageSize < 100) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-//                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
