@@ -10,7 +10,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-@ComponentScan(basePackages = { "io.swagger", "io.swagger.api" , "io.swagger.configuration"})
+@ComponentScan(basePackages = { "nl.uva.sne", "nl.uva.sne.api" , "nl.uva.sne.configuration","nl.uva.sne.controller"})
 public class Swagger2SpringBoot implements CommandLineRunner {
 
     @Override
