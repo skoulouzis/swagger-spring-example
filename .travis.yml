@@ -8,8 +8,8 @@ language: java
 matrix:
   include:
     - jdk: openjdk8
-    - jdk: openjdk9
-    - jdk: openjdk10
+    #- jdk: openjdk9
+    #- jdk: openjdk10
 
 
 before_install:
@@ -27,4 +27,9 @@ before_script:
     
 script:
   - mvn clean install dockerfile:build
-  - docker run -d -t -p 8080:8080 alogo53/swagger-spring:1.0.0
+  #- docker run -d -t -p 8080:8080 alogo53/swagger-spring:1.0.0
+  
+  
+  
+after_script:
+    - docker images 
