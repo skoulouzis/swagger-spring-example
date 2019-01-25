@@ -1,12 +1,21 @@
-sudo: true
-language: java
+sudo: required
+
 services:
-- docker
-cache:
-  directories:
-  - "$HOME/.cache"
+  - docker
 
-deploy:
-  provider: script
-  script: "sudo mvn clean install dockerfile:build"
+language: java
 
+matrix:
+  include:
+    - jdk: openjdk8
+    - jdk: openjdk9
+    - jdk: openjdk10
+    - jdk: openjdk11
+
+
+before_install:
+  # troubleshooting info in case of problems
+  - docker version
+  - docker info
+
+script: mvn clean verify -B
