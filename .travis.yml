@@ -3,14 +3,7 @@ sudo: required
 services:
   - docker
 
-language: java
 
-matrix:
-  include:
-    - jdk: openjdk8
-    - jdk: openjdk9
-    - jdk: openjdk10
-    #- jdk: openjdk11
 
 
 before_install:
@@ -21,3 +14,29 @@ script:
   - mvn clean install dockerfile:build
   - docker run -d -t -p 8080:8080 alogo53/swagger-spring:1.0.0
   - 
+  
+  
+matrix:
+  include:
+    - jdk: openjdk8
+    - jdk: openjdk9
+    - jdk: openjdk10  
+    - language: java
+      script:
+        - mvn clean install dockerfile:build
+
+    - language: node_js
+      node_js:
+        - "8.2.1"
+
+      install:
+        - npm install newman
+
+      before_script:
+        - node --version
+        - npm --version
+        - node_modules/.bin/newman --version
+
+      script:
+        - node_modules/.bin/newman run tests/bitcoinz.postman_collection.json -e tests/tests.postman_environment.json
+    
