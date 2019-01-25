@@ -14,8 +14,10 @@ matrix:
 
 
 before_install:
-  # troubleshooting info in case of problems
   - docker version
   - docker info
 
-script: mvn clean install dockerfile:build
+script:
+  - mvn clean install dockerfile:build
+  - docker run -d -t -p 8080:8080 alogo53/swagger-spring:1.0.0
+  - 
