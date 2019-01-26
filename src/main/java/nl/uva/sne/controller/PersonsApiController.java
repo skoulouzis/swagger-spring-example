@@ -93,7 +93,6 @@ public class PersonsApiController implements PersonsApi {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 

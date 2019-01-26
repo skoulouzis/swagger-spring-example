@@ -27,9 +27,9 @@ import java.math.BigDecimal;
  * Adapted from the jackson threetenbp InstantDeserializer to add support for deserializing rfc822 format.
  *
  * @author Nick Williams
+ * @param <T>
  */
-public class CustomInstantDeserializer<T extends Temporal>
-    extends ThreeTenDateTimeDeserializerBase<T> {
+public class CustomInstantDeserializer<T extends Temporal> extends ThreeTenDateTimeDeserializerBase<T> {
   private static final long serialVersionUID = 1L;
 
   public static final CustomInstantDeserializer<Instant> INSTANT = new CustomInstantDeserializer<Instant>(
