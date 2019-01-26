@@ -28,11 +28,13 @@ before_script:
     
 script:
   - mvn clean install dockerfile:build
-  - docker run -d -t -p 8080:8080 alogo53/swagger-spring-example:1.0.0
-  #- count=0 && until $(curl --output /dev/null --silent --head --fail http://localhost:8080); do printf '.' && sleep 3 && count=$((count+1)) && if [ $count -gt 5 ]; then break; fi; done
- #&& node_modules/.bin/newman run tests/postman_collection.json -e tests/postman_environment.json
+  - docker run -i -t -p 8080:8080 alogo53/swagger-spring-example:1.0.0
+  - docker ps
+  - count=0 && until $(curl --output /dev/null --silent --head --fail http://localhost:8080); do printf '.' && sleep 3 && count=$((count+1)) && if [ $count -gt 5 ]; then break; fi; done
+ && node_modules/.bin/newman run tests/postman_collection.json -e tests/postman_environment.json
   
   
 after_script:
     - curl -v 127.0.0.1:8080
     - curl -v localhost:8080
+    - docker ps
