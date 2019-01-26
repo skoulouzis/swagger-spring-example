@@ -30,6 +30,7 @@ script:
   - mvn clean install dockerfile:build
   - docker run --name example_api -d -t -p 127.0.0.1:8080:8080 alogo53/swagger-spring-example:1.0.0
   - docker ps
+  - sleep 5
   - docker logs example_api
   - node_modules/.bin/newman run tests/postman_collection.json -e tests/postman_environment.json
   
@@ -38,4 +39,3 @@ after_script:
     - curl -v 127.0.0.1:8080
     - curl -v localhost:8080
     - docker ps
-    - docker logs example_api
