@@ -8,7 +8,7 @@ language: java
 matrix:
   include:
     - jdk: openjdk8
-    - jdk: openjdk9
+   # - jdk: openjdk9
     #- jdk: openjdk10
 
 
@@ -35,7 +35,7 @@ script:
   - node_modules/.bin/newman run tests/postman_collection.json -e tests/postman_environment.json
   
   
-#after_script:
+after_script:
     #- curl -v 127.0.0.1:8080
     #- curl -v localhost:8080
-    #- docker ps
+    - docker ps
