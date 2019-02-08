@@ -1,41 +1,31 @@
 sudo: required
 services:
-  - docker
+- docker
 language: java
-env:
-  global:
-    - secure:"PWmDuZcCzbVkkVRc4CTVzRh6VqaBc+Q3nysmCbriAm4Y0X9FLj58MNMu8/NKDZlCDj5Tr3NjWSp+W2q+G2QbftIYiP2ZmYrnbkhwcvioOMoz5HhOmvrV8+Jx/JqSPoY2qj0BdXsMZRIQ0eIxkLxTtGapR7unUnuRUZU9iQuWGKxJJQlXJLCtNYdoewhgDaMlFF5n2nos1ANRx6SfhrIKHogP1Nd7QUcOMcEkasoxOabHnzwgYj27teZZxsLPMJNcM66M8OTzKsBHdL2qD9LZ+gDDruJsjo2UYRsxhpoYbVqhBnTN1Pcr9P3XwGg4RyDiO1I7XKScp45QCkH+pZ5mcp5kq3oy+eWWmcxHbJWmqJQWgC4C+3TU89xiWEsiaIU91xfyeVDih33XA05/H3WMO/tVieNjSUcAKvCuwkBs6DlUaqb/9RSiv7fMOLIBTo/TQz13dPmJqWMh0EsxqQeufi928XlxRD/IbWcC1llMQPUr/CWuE3bgv5lcsXvm5Kf2fgO3DjeOjKJ/67VM+xRDqSkx8eQt4d/9PSOCpS67FgoMo0c86w/suPqp0wRTp7+xmsexkjoeY1/+4Lq4tjeodTWYzVXKpq29plH3Bq64hSBZYfsAZLCUv7z7R/h8B+39Vf9s+PVQnAEeRmneeRjjY5see14PWnwETXLPYLiexHQ="
 matrix:
   include:
-    - jdk: openjdk8
-    #- jdk: openjdk9
-    #- jdk: openjdk10
+  - jdk: openjdk8
 before_install:
-  - docker version
-  - docker info
+- docker version
+- docker info
 install:
-    - npm install newman
+- npm install newman
 before_script:
-    - node --version
-    - npm --version
-    - node_modules/.bin/newman --version     
+- node --version
+- npm --version
+- node_modules/.bin/newman --version
 script:
-  - mvn clean install dockerfile:build
-  - docker run --name example_api -d -t -p 127.0.0.1:8080:8080 alogo53/swagger-spring-example:1.0.0
-  - docker ps
-  - count=0 && until $(curl --output /dev/null --silent --head --fail http://localhost:8080); do printf '.' && sleep 3 && count=$((count+1)) && if [ $count -gt 5 ]; then break; fi; done
-  - docker logs example_api
-  - node_modules/.bin/newman run tests/postman_collection.json -e tests/postman_environment.json
-
+- mvn clean install dockerfile:build
+- docker run --name example_api -d -t -p 127.0.0.1:8080:8080 alogo53/swagger-spring-example:1.0.0
+- docker ps
+- count=0 && until $(curl --output /dev/null --silent --head --fail http://localhost:8080);
+  do printf '.' && sleep 3 && count=$((count+1)) && if [ $count -gt 5 ]; then break;
+  fi; done
+- docker logs example_api
+- node_modules/.bin/newman run tests/postman_collection.json -e tests/postman_environment.json
 after_success:
-  - echo $TEST_SECRET_VAR
-  - printenv
-  #- docker login -u $DOCKER_USER -p $DOCKER_PASS
-  #- docker tag alogo53/swagger-spring-example:1.0.0 alogo53/swagger-spring-example:1.0.0
-  #- docker push alogo53/swagger-spring-example:1.0.0
-  
-  
-#after_script:
-    #- curl -v 127.0.0.1:8080
-    #- curl -v localhost:8080
-    #- docker ps
+- echo $MY_SECRET_ENV
+- printenv
+env:
+  matrix:
+    secure: Vsgm5dAIRwnWn/xKB+FPigpXoTkDlHJ1M+uI1Nl5NSQcnU8JOm7PFpncBCe3IuGsLuftI37VJox7T4GykWTj4C9WjqzipgK1G5xLrqvO8liSMsJ3gkE6gpTy0V+wNSiAudKYIHY10PsuuYaXtBXZXNfEgb7h8/+fcZ70jWewMRkJr8O9YFkiWivxEeJd1J6FJyUh0kwFCRJjZgy/6Sl1DlTwsoSLmLq8eJe9O0zDwKvCyot3kr5MGVnJcoOgNoFql1bambSvLJtDcFdxZIaRp8POV2kOx6wGMgTMNFSURfbrp//kmEmsXtxUIj0z+kwKuzsL+Jj4NuxHEGEDKss4l1Vn250pvXcmVRkojThLJxWZ3mBrAtbR1loi9KCd+wkFpk09pc+6HyhQ1onr4NTc5u0xbpADYGS2LipZgFy3JGVjAStDOO35kiw21Xe4YA4bHz+/sEeSnoU0lqNo3Dzf6S0gAr1W1MipQ1fUqIoxXiMWrZc2fa9ouoz2F/DphHAGdR6LjA6i/vypKTcwYwycnwbWqeyWAnzf6+PhBmFxCOAACCV0dek+aN2IjP3N5KFHwt0fSsBJFm/Iw9fK0K8wGW+zOENwC/+8FwOv9gBdLxvfDxW0cAN7Xd6SGsYJF+1hv+Hubtn8wHYflIZX2sTLmONBZg6lLadYXFCvMsFP0Yk=
