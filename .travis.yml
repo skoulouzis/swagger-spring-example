@@ -46,7 +46,7 @@ script:
 after_success:
   - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
   - export REPO=alogo53
-  - docker tag $REPO:swagger-spring-example:1.0.0
+  - docker tag alogo53/swagger-spring-example:1.0.0 $REPO:swagger-spring-example:1.0.0
   - docker $REPO:swagger-spring-example:1.0.0
   
   
