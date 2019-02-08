@@ -46,9 +46,3 @@ script:
   - export REPO=alogo53
   - docker tag $REPO:swagger-spring-example:1.0.0
   - docker $REPO:swagger-spring-example:1.0.0
-  
-  
-#after_script:
-    #- curl -v 127.0.0.1:8080
-    #- curl -v localhost:8080
-    #- docker ps
