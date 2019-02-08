@@ -5,10 +5,17 @@ services:
 
 language: java
 
+env:
+  global:
+    - secure:"INtPCltsaDtBInChpv7RkRGMTNXCTslCN2+DhwbRWfICEnkUK7gAll5zD1q/JZbpqz40Df5oNCb3TxgkYawl6ZXtqUgpl9oTwa4qZxPcHyW70v/7uJ6o2wqTSX43DwAdc4xopvaYqtOrZacXdXZrDTLhUTerr8yFac86WoInXsTGSMdLlICmPukzqTnNZn9wM09sCNcGiDLwcOajsgklhs0xJaOWtlIPx4u64S53ujZm1bH1P8AW4OJzEIBLOq/biXcb9dvrGwIvY+FXdOCT8v5IU6HEs63kh0HltIXLs+6qkVmLA6yCoR7meiGlBD6/bYApulaL19s3vuYe3gImLm7RjyLfXoVDGGPiL0HGHH7JtFLmyvfjI45cezeL5wmA0YVWOkU7TWWyJDLuOj+r6GMqblfAy4jttfJKo381V9RvEZh6sgJShSADDmfnibk+ufWbvbp9w963n2NztJk4BRPo+5bVFr6elxvllRwVM1kjN/LXxLwpjHXXxByJNaVD3n78i4q9ccg851zpKyvio6Swp2ZobwVZ6x9JGY5GcdwlE6GhMDzsp1SbMH7F2RkJFt3zUqRzdEK7Khxn4087Bug0UlvrJrPjgoXX8e7DiZ8p0n/fsEgxGXw7sqtsquQxlPMG3w9GZkl4r2/c9dZprD1v+UUvjBjn6D+gaNhukFU="
+    - secure:"ScYV4NeNZg1nCo4f3l8pG4Gimcg3iBvUOkzVuqKuaJssQ/JU1zujn3tR3icAIrXuJh2OhsHAiDKGePQyUygbOynqNy+FZgfMb/U4/bW8CKAsnk23OQjeJbSuPEilAMlUQac70ZFQ8s3gn4VOnH1QDJ9gQgN8yFnpywTQvJD31c7oTA67v53dB3aG4RRyHkPMcv3UpsnLNFrXztLtlHO1pg7lxI1BximT4tgX39AZ//WvdumnnW3fx7+mYeYwIClB8NTeeJqF32WW6PYnZFktrp9Or1jau0iv4nqAgoumwd616JrA99VDlGENdunlY6zLg8o9+Vf9mUY7/GaDr34DmNKoY9DNW/pvw2noGPdN1LUtAVgXDUFY0QDSaBBpgtVEU8xT6HK2uVl8ruGNSAT7gEUtbj3dL7URwsYZJfNiBsLrcDMe9YQQQbFNwqsBY0WCnhn0R4Frr3z4HnB6FvQdSEmsBxdCXnrVjU63zPKAd+AGOUdFfcyNSiDCE2/EBMqA7KkAOMNw+uwZYpWekFbmEnlMeKSEXSQQogmjNw2FkXwnHG9jtpkMoCuhJ5lX1l8neBWuH4Z5+Ru0sKVH6n84xT7XWCpxU6MogYOioG6enL6VbWhXuRvFr8ZBGVQiNSTsg4JjpatNuKmt+ZjiojV9LfHKomGcJ3XbbtYqb/GObsU="
+    - secure:"UW/QicDL0wAASVbZiXHP4IFX6tANJKfV3+nKYtIme/LhW3pbShm42csHUkujFt+4oJJTgNp2GVqh1CXHMvhFXeEBfB3ENxO1WtJuRNSqO5tt9gtq35cvWXhwEZBs8zQxaCofjlqKA0pC+HDMBYmQkS30dX3/6m1NiYZLr4nbSv9bQxSr1RIKs5eh4yy2cz33mN/oO3JRfSgkNn/NpVoDzJSwx5WjYJE1DFsxoaP824DWEplr0KYLUqYUl4AKHn27h5Oe0olH/iUI8NcnNQ5kx3t0PVNE8ZUTb6hegjvZiljh9eiH7kFilNPvAU87ERDEks5/1BJ4/nMorimW0h4YNECM7jjIksLm3Hvf8wdpqX4Q6tCbNTZB4MAsVYIv4DV+Y7COjA99gMeIt+Mek4k00iBCIajeUKUcWxr493y8jeA+l8cfe3zduTONXj1T2xnrvyoJ7kf0ZqBDQmS2wvfg0WcJHa8eQGxFLNiV2Vjaa6S5O4KUJEch+9ahuE71NHb9SaPFxTz9QhP4t/lnElvRGCRNei9lKVUGRwvXD1xwxM0WzqnwEIICcWfiHxWsLtzsX9Hokq0zYHFpGNKCfe4ftsAekROefu5K2NnBlF38Hrseoi4uaYXv/KsoCB3f7XYXmwv80ELx/7J3KElahu+7ZDW52siK7g2+jJjAggXXvNI="
+
+
 matrix:
   include:
     - jdk: openjdk8
-   # - jdk: openjdk9
+    #- jdk: openjdk9
     #- jdk: openjdk10
 
 
@@ -33,9 +40,15 @@ script:
   - count=0 && until $(curl --output /dev/null --silent --head --fail http://localhost:8080); do printf '.' && sleep 3 && count=$((count+1)) && if [ $count -gt 5 ]; then break; fi; done
   - docker logs example_api
   - node_modules/.bin/newman run tests/postman_collection.json -e tests/postman_environment.json
+
+  after_success:
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - export REPO=alogo53
+  - docker tag $REPO:swagger-spring-example:1.0.0
+  - docker $REPO:swagger-spring-example:1.0.0
   
   
-after_script:
+#after_script:
     #- curl -v 127.0.0.1:8080
     #- curl -v localhost:8080
-    - docker ps
+    #- docker ps
