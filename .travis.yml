@@ -1,11 +1,10 @@
-sudo: required
-
+sudo: required 
 services:
   - docker
-
-language: java
-
-
+# ref: https://docs.travis-ci.com/user/languages/python
+language: python
+python:
+  - "3.2"
 
 env:
   global:
@@ -14,43 +13,25 @@ env:
     - secure:"UW/QicDL0wAASVbZiXHP4IFX6tANJKfV3+nKYtIme/LhW3pbShm42csHUkujFt+4oJJTgNp2GVqh1CXHMvhFXeEBfB3ENxO1WtJuRNSqO5tt9gtq35cvWXhwEZBs8zQxaCofjlqKA0pC+HDMBYmQkS30dX3/6m1NiYZLr4nbSv9bQxSr1RIKs5eh4yy2cz33mN/oO3JRfSgkNn/NpVoDzJSwx5WjYJE1DFsxoaP824DWEplr0KYLUqYUl4AKHn27h5Oe0olH/iUI8NcnNQ5kx3t0PVNE8ZUTb6hegjvZiljh9eiH7kFilNPvAU87ERDEks5/1BJ4/nMorimW0h4YNECM7jjIksLm3Hvf8wdpqX4Q6tCbNTZB4MAsVYIv4DV+Y7COjA99gMeIt+Mek4k00iBCIajeUKUcWxr493y8jeA+l8cfe3zduTONXj1T2xnrvyoJ7kf0ZqBDQmS2wvfg0WcJHa8eQGxFLNiV2Vjaa6S5O4KUJEch+9ahuE71NHb9SaPFxTz9QhP4t/lnElvRGCRNei9lKVUGRwvXD1xwxM0WzqnwEIICcWfiHxWsLtzsX9Hokq0zYHFpGNKCfe4ftsAekROefu5K2NnBlF38Hrseoi4uaYXv/KsoCB3f7XYXmwv80ELx/7J3KElahu+7ZDW52siK7g2+jJjAggXXvNI="
 
 
-matrix:
-  include:
-    - jdk: openjdk8
-    #- jdk: openjdk9
-    #- jdk: openjdk10
-
-
 before_install:
   - docker version
   - docker info
-  
-
 install:
     - npm install newman
-
+    - "pip install -r requirements.txt"
 before_script:
     - node --version
     - npm --version
     - node_modules/.bin/newman --version  
-
     
 script:
-  - mvn clean install dockerfile:build
-  - docker run --name example_api -d -t -p 127.0.0.1:8080:8080 alogo53/swagger-spring-example:1.0.0
+  - nosetests
+  - docker build -t my_docker_reposetory/swagger_server:1.0.0 .
+  - docker run --name example_api -d -t -p 127.0.0.1:8080:8080 my/swagger-spring-example:1.0.0
   - docker ps
   - count=0 && until $(curl --output /dev/null --silent --head --fail http://localhost:8080); do printf '.' && sleep 3 && count=$((count+1)) && if [ $count -gt 5 ]; then break; fi; done
-  - docker logs example_api
-  - node_modules/.bin/newman run tests/postman_collection.json -e tests/postman_environment.json
 
 after_success:
-  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-  - export REPO=alogo53
-  - docker tag alogo53/swagger-spring-example:1.0.0 $REPO:swagger-spring-example:1.0.0
-  - docker push $REPO:swagger-spring-example:1.0.0
-  
-  
-#after_script:
-    #- curl -v 127.0.0.1:8080
-    #- curl -v localhost:8080
-    #- docker ps
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - docker tag alogo53/swagger-spring-example:1.0.0 alogo53/swagger-spring-example:1.0.0
+  - docker push alogo53/swagger-spring-example:1.0.0
