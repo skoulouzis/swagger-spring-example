@@ -44,6 +44,7 @@ script:
   - node_modules/.bin/newman run tests/postman_collection.json -e tests/postman_environment.json
 
 after_success:
+  - echo $TEST
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - docker tag alogo53/swagger-spring-example:1.0.0 alogo53/swagger-spring-example:1.0.0
   - docker push alogo53/swagger-spring-example:1.0.0
