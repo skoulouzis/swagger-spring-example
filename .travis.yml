@@ -5,6 +5,8 @@ services:
 
 language: java
 
+
+
 env:
   global:
     - secure:"INtPCltsaDtBInChpv7RkRGMTNXCTslCN2+DhwbRWfICEnkUK7gAll5zD1q/JZbpqz40Df5oNCb3TxgkYawl6ZXtqUgpl9oTwa4qZxPcHyW70v/7uJ6o2wqTSX43DwAdc4xopvaYqtOrZacXdXZrDTLhUTerr8yFac86WoInXsTGSMdLlICmPukzqTnNZn9wM09sCNcGiDLwcOajsgklhs0xJaOWtlIPx4u64S53ujZm1bH1P8AW4OJzEIBLOq/biXcb9dvrGwIvY+FXdOCT8v5IU6HEs63kh0HltIXLs+6qkVmLA6yCoR7meiGlBD6/bYApulaL19s3vuYe3gImLm7RjyLfXoVDGGPiL0HGHH7JtFLmyvfjI45cezeL5wmA0YVWOkU7TWWyJDLuOj+r6GMqblfAy4jttfJKo381V9RvEZh6sgJShSADDmfnibk+ufWbvbp9w963n2NztJk4BRPo+5bVFr6elxvllRwVM1kjN/LXxLwpjHXXxByJNaVD3n78i4q9ccg851zpKyvio6Swp2ZobwVZ6x9JGY5GcdwlE6GhMDzsp1SbMH7F2RkJFt3zUqRzdEK7Khxn4087Bug0UlvrJrPjgoXX8e7DiZ8p0n/fsEgxGXw7sqtsquQxlPMG3w9GZkl4r2/c9dZprD1v+UUvjBjn6D+gaNhukFU="
@@ -41,8 +43,14 @@ script:
   - docker logs example_api
   - node_modules/.bin/newman run tests/postman_collection.json -e tests/postman_environment.json
 
-  after_success:
+after_success:
   - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
   - export REPO=alogo53
   - docker tag $REPO:swagger-spring-example:1.0.0
   - docker $REPO:swagger-spring-example:1.0.0
+  
+  
+#after_script:
+    #- curl -v 127.0.0.1:8080
+    #- curl -v localhost:8080
+    #- docker ps
