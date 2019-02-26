@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "eef7fced-3118-4f06-9623-46dfacff0a64",
+		"_postman_id": "214e05b8-f4b4-4494-a3e4-cb9ff7e58b01",
 		"name": "Simple API",
 		"description": "A simple API to learn how to write OpenAPI Specification",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -89,6 +89,74 @@
 									"     pm.response.to.be.withBody;",
 									"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
 									"});",
+									"",
+									"//reset count variable",
+									"postman.setEnvironmentVariable(\"count\", 0);",
+									"",
+									"var jsonData = JSON.parse(responseBody); //get the response and pase it into json",
+									"var numOfposts = _.parseInt(environment.numOfposts);",
+									"tests[\"Number of array items: \"+jsonData.items.length+ \" should be eqaual to pageSize:\"+numOfposts] = jsonData.items.length == numOfposts; // test if the returned array size is equal to the numOfposts (5)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/persons?pageSize={{pageSize}}&pageNumber={{pageNumber}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"persons"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "{{pageSize}}"
+								},
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumber}}"
+								}
+							]
+						},
+						"description": "Returns a list containing all persons. The list supports paging."
+					},
+					"response": []
+				},
+				{
+					"name": "Gets some persons Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "eb32029f-153a-40f0-9436-bfb7f98fbb4f",
+								"exec": [
+									"pm.test(\"response must be valid and have a body\", function () {",
+									"     // assert that the status code is 200",
+									"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants",
+									"     // assert that the response has a valid JSON body",
+									"     pm.response.to.be.withBody;",
+									"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed",
+									"});",
+									"",
+									"var numOfposts = _.parseInt(environment.numOfposts);",
+									"var jsonData = JSON.parse(responseBody); //get the response and pase it into json",
+									"tests[\"Number of array items: \"+jsonData.items.length+ \" should be eqaual to pageSize:\"+numOfposts] = jsonData.items.length == numOfposts; // test if the returned array size is equal to the numOfposts (5)",
 									""
 								],
 								"type": "text/javascript"
@@ -190,7 +258,10 @@
 							"script": {
 								"id": "ff9b1440-8409-45be-8795-f5bc8b8b9d6b",
 								"exec": [
-									""
+									"pm.test(\"response must be valid\", function () {",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.have.status(204);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
