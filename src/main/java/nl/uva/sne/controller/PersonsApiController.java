@@ -16,11 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.OffsetDateTime;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2019-01-23T15:56:30.486Z")
 
@@ -65,7 +60,21 @@ public class PersonsApiController implements PersonsApi {
     @Override
     public ResponseEntity<Void> personsUsernameDelete(@ApiParam(value = "The person's username", required = true) @PathVariable("username") String username) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        Person toRemove = null;
+        if (getPersons().getItems() != null) {
+            for (Person p : getPersons().getItems()) {
+                if (p.getUsername().equals(username)) {
+                    toRemove = p;
+                    break;
+                }
+            }
+            if (toRemove != null) {
+                getPersons().getItems().remove(toRemove);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Override
